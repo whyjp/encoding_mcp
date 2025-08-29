@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "encoding-mcp": {
+      "command": "python",
+      "args": ["-m", "encoding_mcp"],
+      "env": {
+        "DEBUG": "false"
+      }
+    },
+    "encoding-mcp-direct": {
+      "command": "python", 
+      "args": ["D:/exam/encoding_mcp/encoding_mcp/server.py"],
+      "env": {
+        "DEBUG": "false"
+      }
+    }
+  }
+}

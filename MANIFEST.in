@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+include requirements.txt
+include MANIFEST.in
+recursive-include encoding_mcp *.py
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .git*
+global-exclude test_*
+global-exclude *test*
