@@ -128,9 +128,13 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "file_name": {
                         "type": "string",
-                        "description": "생성할 파일의 경로"
+                        "description": "생성할 파일명 (예: hello.cpp, test.h)"
+                    },
+                    "directory_path": {
+                        "type": "string", 
+                        "description": "파일을 생성할 디렉터리의 절대 경로"
                     },
                     "encoding": {
                         "type": "string",
@@ -139,7 +143,7 @@ async def list_tools() -> list[Tool]:
                         "default": "utf-8-bom"
                     }
                 },
-                "required": ["file_path"]
+                "required": ["file_name", "directory_path"]
             }
         ),
         Tool(
@@ -148,9 +152,13 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "file_name": {
                         "type": "string",
-                        "description": "확인할 파일의 경로"
+                        "description": "확인할 파일명 (예: hello.cpp, test.h)"
+                    },
+                    "directory_path": {
+                        "type": "string",
+                        "description": "파일이 있는 디렉터리의 절대 경로"
                     },
                     "max_bytes": {
                         "type": "integer",
@@ -160,7 +168,7 @@ async def list_tools() -> list[Tool]:
                         "maximum": 65536
                     }
                 },
-                "required": ["file_path"]
+                "required": ["file_name", "directory_path"]
             }
         ),
         Tool(
@@ -169,9 +177,13 @@ async def list_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "file_name": {
                         "type": "string",
-                        "description": "변환할 파일의 경로"
+                        "description": "변환할 파일명 (예: hello.cpp, test.h)"
+                    },
+                    "directory_path": {
+                        "type": "string",
+                        "description": "파일이 있는 디렉터리의 절대 경로"
                     },
                     "target_encoding": {
                         "type": "string",
@@ -185,7 +197,7 @@ async def list_tools() -> list[Tool]:
                         "default": True
                     }
                 },
-                "required": ["file_path"]
+                "required": ["file_name", "directory_path"]
             }
         ),
         Tool(
@@ -204,8 +216,12 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
     """도구를 실행합니다."""
     
     if name == "create_empty_file":
-        file_path = arguments.get("file_path", "")
+        file_name = arguments.get("file_name", "")
+        directory_path = arguments.get("directory_path", "")
         encoding = arguments.get("encoding", "utf-8-bom")
+        
+        # 파일명과 디렉터리 경로 결합
+        file_path = os.path.join(directory_path, file_name)
         
         result = create_empty_file(file_path, encoding)
         
@@ -225,16 +241,20 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         ]
     
     elif name == "detect_file_encoding":
-        file_path = arguments.get("file_path", "")
+        file_name = arguments.get("file_name", "")
+        directory_path = arguments.get("directory_path", "")
         max_bytes = arguments.get("max_bytes", 8192)
         
-        if not file_path:
+        if not file_name or not directory_path:
             return [
                 types.TextContent(
                     type="text",
-                    text="❌ 파일 경로가 지정되지 않았습니다."
+                    text="❌ 파일명과 디렉터리 경로가 모두 필요합니다."
                 )
             ]
+        
+        # 파일명과 디렉터리 경로 결합
+        file_path = os.path.join(directory_path, file_name)
         
         result = detect_file_encoding(file_path, max_bytes)
         formatted_result = format_encoding_result(result, file_path)
@@ -247,9 +267,13 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         ]
     
     elif name == "convert_file_encoding":
-        file_path = arguments.get("file_path", "")
+        file_name = arguments.get("file_name", "")
+        directory_path = arguments.get("directory_path", "")
         target_encoding = arguments.get("target_encoding", "utf-8-bom")
         backup = arguments.get("backup", True)
+        
+        # 파일명과 디렉터리 경로 결합
+        file_path = os.path.join(directory_path, file_name)
         
         result = convert_file_encoding(file_path, target_encoding, backup)
         
