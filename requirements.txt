@@ -1,1 +1,4 @@
 mcp>=1.0.0
+# 인코딩 감지 라이브러리 (우선순위대로)
+charset-normalizer>=3.0.0
+chardet>=5.0.0
