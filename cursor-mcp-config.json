@@ -6,13 +6,6 @@
       "env": {
         "DEBUG": "false"
       }
-    },
-    "encoding-mcp-direct": {
-      "command": "python", 
-      "args": ["D:/exam/encoding_mcp/encoding_mcp/server.py"],
-      "env": {
-        "DEBUG": "false"
-      }
     }
   }
 }

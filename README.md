@@ -1,6 +1,13 @@
 # Encoding MCP Server v2.0
 
+[![PyPI version](https://badge.fury.io/py/encoding-mcp.svg)](https://pypi.org/project/encoding-mcp/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Downloads](https://pepy.tech/badge/encoding-mcp)](https://pepy.tech/project/encoding-mcp)
+
 Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성하고 관리하는 전문적인 MCP (Model Context Protocol) 서버입니다.
+
+**🚀 [PyPI에서 설치](https://pypi.org/project/encoding-mcp/)**: `pip install encoding-mcp`
 
 ## ✨ v2.0 새로운 기능
 
@@ -52,17 +59,36 @@ Encoding MCP 시스템 정보를 확인합니다. 사용 가능한 라이브러�
 
 ## 🚀 빠른 시작
 
-### 1. PyPI에서 설치
+### 1. PyPI에서 설치 (권장)
 ```bash
+# 최신 안정 버전 설치
 pip install encoding-mcp
+
+# 설치 확인
+python -m encoding_mcp --version
 ```
 
-### 2. MCP Inspector로 테스트
+### 2. Cursor에서 MCP 서버 연결
+```json
+{
+  "mcpServers": {
+    "encoding-mcp": {
+      "command": "python",
+      "args": ["-m", "encoding_mcp"],
+      "env": {
+        "DEBUG": "false"
+      }
+    }
+  }
+}
+```
+
+### 3. MCP Inspector로 테스트
 ```bash
 npx @modelcontextprotocol/inspector python -m encoding_mcp
 ```
 
-### 3. 개발자 설치 (선택사항)
+### 4. 개발자 설치 (선택사항)
 ```bash
 git clone https://github.com/whyjp/encoding_mcp.git
 cd encoding_mcp
@@ -88,6 +114,36 @@ python -m encoding_mcp
 ```bash
 python encoding_mcp/server.py
 ```
+
+## 🎯 PyPI 설치 후 즉시 사용
+
+### ✅ **설치 확인**
+```bash
+# 패키지 설치 확인
+pip show encoding-mcp
+
+# 버전 확인
+python -c "import encoding_mcp; print(encoding_mcp.__version__)"
+
+# MCP 서버 실행 테스트
+python -m encoding_mcp
+```
+
+### 🚀 **Cursor에서 즉시 사용**
+1. **Cursor 설정** → **Extensions** → **MCP**
+2. **설정 파일에 추가**:
+```json
+{
+  "mcpServers": {
+    "encoding-mcp": {
+      "command": "python",
+      "args": ["-m", "encoding_mcp"]
+    }
+  }
+}
+```
+3. **Cursor 재시작**
+4. **MCP 도구 사용 가능!** 🎉
 
 ## 💡 사용 예시
 
@@ -148,9 +204,9 @@ create_empty_file(file_name="korean.txt", encoding="cp949")
 create_empty_file(file_name="config.txt", encoding="ascii")
 ```
 
-## 🔗 Cursor 연결
+## 🔗 Cursor MCP 연결 설정
 
-### 기본 설정 (권장)
+### 🚀 PyPI 설치 후 기본 설정 (권장)
 ```json
 {
   "mcpServers": {
@@ -165,13 +221,62 @@ create_empty_file(file_name="config.txt", encoding="ascii")
 }
 ```
 
-### 직접 실행 방식
+### 🔧 개발자 모드 (디버그 활성화)
+```json
+{
+  "mcpServers": {
+    "encoding-mcp-dev": {
+      "command": "python",
+      "args": ["-m", "encoding_mcp"],
+      "env": {
+        "DEBUG": "true",
+        "LOG_LEVEL": "DEBUG"
+      }
+    }
+  }
+}
+```
+
+### 🐍 특정 Python 버전 사용
 ```json
 {
   "mcpServers": {
     "encoding-mcp": {
+      "command": "python3.11",
+      "args": ["-m", "encoding_mcp"],
+      "env": {
+        "DEBUG": "false"
+      }
+    }
+  }
+}
+```
+
+### 🖥️ 가상환경 사용
+```json
+{
+  "mcpServers": {
+    "encoding-mcp": {
+      "command": "/path/to/venv/bin/python",
+      "args": ["-m", "encoding_mcp"],
+      "env": {
+        "DEBUG": "false"
+      }
+    }
+  }
+}
+```
+
+### 📁 개발자 직접 실행 방식 (개발용)
+```json
+{
+  "mcpServers": {
+    "encoding-mcp-dev": {
       "command": "python",
-      "args": ["경로/encoding_mcp/server.py"]
+      "args": ["/path/to/encoding_mcp/encoding_mcp/server.py"],
+      "env": {
+        "DEBUG": "true"
+      }
     }
   }
 }

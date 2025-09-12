@@ -1,0 +1,94 @@
+{
+  "// PyPI 설치 후 기본 사용": {
+    "mcpServers": {
+      "encoding-mcp": {
+        "command": "python",
+        "args": ["-m", "encoding_mcp"],
+        "env": {
+          "DEBUG": "false"
+        }
+      }
+    }
+  },
+  
+  "// 개발자 모드 (디버그 활성화)": {
+    "mcpServers": {
+      "encoding-mcp-dev": {
+        "command": "python",
+        "args": ["-m", "encoding_mcp"],
+        "env": {
+          "DEBUG": "true",
+          "LOG_LEVEL": "DEBUG"
+        }
+      }
+    }
+  },
+
+  "// 가상환경 사용": {
+    "mcpServers": {
+      "encoding-mcp-venv": {
+        "command": "C:/path/to/venv/Scripts/python.exe",
+        "args": ["-m", "encoding_mcp"],
+        "env": {
+          "DEBUG": "false"
+        }
+      }
+    }
+  },
+
+  "// 특정 Python 버전 지정": {
+    "mcpServers": {
+      "encoding-mcp-py311": {
+        "command": "python3.11",
+        "args": ["-m", "encoding_mcp"],
+        "env": {
+          "DEBUG": "false"
+        }
+      }
+    }
+  },
+
+  "// 다중 MCP 서버와 함께 사용": {
+    "mcpServers": {
+      "encoding-mcp": {
+        "command": "python",
+        "args": ["-m", "encoding_mcp"],
+        "env": {
+          "DEBUG": "false"
+        }
+      },
+      "other-mcp-server": {
+        "command": "node",
+        "args": ["other-server.js"]
+      }
+    }
+  },
+
+  "// Windows 전용 설정": {
+    "mcpServers": {
+      "encoding-mcp-windows": {
+        "command": "python",
+        "args": ["-m", "encoding_mcp"],
+        "env": {
+          "DEBUG": "false",
+          "PYTHONIOENCODING": "utf-8",
+          "PYTHONPATH": "C:/path/to/additional/modules"
+        }
+      }
+    }
+  },
+
+  "// macOS/Linux 전용 설정": {
+    "mcpServers": {
+      "encoding-mcp-unix": {
+        "command": "python3",
+        "args": ["-m", "encoding_mcp"],
+        "env": {
+          "DEBUG": "false",
+          "LANG": "en_US.UTF-8",
+          "LC_ALL": "en_US.UTF-8"
+        }
+      }
+    }
+  }
+}
