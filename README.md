@@ -52,27 +52,34 @@ Encoding MCP 시스템 정보를 확인합니다. 사용 가능한 라이브러�
 
 ## 🚀 빠른 시작
 
-### 1. 저장소 클론 및 설치
+### 1. PyPI에서 설치
+```bash
+pip install encoding-mcp
+```
+
+### 2. MCP Inspector로 테스트
+```bash
+npx @modelcontextprotocol/inspector python -m encoding_mcp
+```
+
+### 3. 개발자 설치 (선택사항)
 ```bash
 git clone https://github.com/whyjp/encoding_mcp.git
 cd encoding_mcp
-pip install -e .
-```
-
-### 2. 필수 라이브러리 설치
-```bash
-pip install charset-normalizer chardet
-```
-
-### 3. MCP Inspector로 테스트
-```bash
-npx @modelcontextprotocol/inspector python encoding_mcp/server.py
+pip install -e .[dev,test]
 ```
 
 ## 📦 설치 방법
 
-### 🔧 개발자 모드 (권장)
+### 🚀 PyPI에서 설치 (권장)
 ```bash
+pip install encoding-mcp
+```
+
+### 🔧 개발자 모드
+```bash
+git clone https://github.com/whyjp/encoding_mcp.git
+cd encoding_mcp
 pip install -e .
 python -m encoding_mcp
 ```

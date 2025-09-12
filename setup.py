@@ -18,11 +18,11 @@ setup(
     name="encoding-mcp",
     version="1.0.0",
     author="Encoding MCP Team",
-    author_email="",
+    author_email="whyj.park@gmail.com",
     description="Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성하고 관리하는 MCP 서버",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/encoding-mcp",
+    url="https://github.com/whyjp/encoding_mcp",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -50,7 +50,7 @@ setup(
     },
     keywords="mcp encoding utf8 bom windows build cpp powershell",
     project_urls={
-        "Bug Reports": "https://github.com/yourusername/encoding-mcp/issues",
-        "Source": "https://github.com/yourusername/encoding-mcp",
+        "Bug Reports": "https://github.com/whyjp/encoding_mcp/issues",
+        "Source": "https://github.com/whyjp/encoding_mcp",
     },
 )
