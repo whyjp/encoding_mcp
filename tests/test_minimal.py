@@ -10,7 +10,7 @@ import sys
 
 def test_python_version():
     """Python 버전 확인"""
-    assert sys.version_info >= (3, 9)
+    assert sys.version_info >= (3, 10), f"Python 3.10+ required, got {sys.version_info[:2]}"
 
 
 def test_basic_import():

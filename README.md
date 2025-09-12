@@ -256,6 +256,10 @@ write(
 
 ## 🔍 기술 세부사항
 
+### 📚 **시스템 요구사항**
+- **Python 3.10+** (MCP 모듈의 pattern matching 기능 사용)
+- Windows, macOS, Linux 지원
+
 ### 📚 **의존성**
 - `mcp>=1.0.0`: Model Context Protocol
 - `charset-normalizer>=3.0.0`: 현대적 인코딩 감지

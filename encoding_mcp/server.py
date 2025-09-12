@@ -30,14 +30,24 @@ except ImportError:
     import sys
     import os
     sys.path.insert(0, os.path.dirname(__file__))
-    from encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
-    from file_operations import (
-        create_empty_file, 
-        convert_file_encoding, 
-        get_file_info, 
-        list_supported_encodings,
-        get_encoding_info
-    )
+    try:
+        from .encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
+        from .file_operations import (
+            create_empty_file, 
+            convert_file_encoding, 
+            get_file_info, 
+            list_supported_encodings,
+            get_encoding_info
+        )
+    except ImportError:
+        from encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
+        from file_operations import (
+            create_empty_file, 
+            convert_file_encoding, 
+            get_file_info, 
+            list_supported_encodings,
+            get_encoding_info
+        )
 
 def format_encoding_result(result: dict, file_path: str) -> str:
     """
