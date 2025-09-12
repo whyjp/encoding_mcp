@@ -7,7 +7,7 @@
 """
 
 import os
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Any
 
 # 인코딩 감지 라이브러리들 (우선순위대로)
 try:
@@ -52,7 +52,7 @@ def detect_bom(raw_data: bytes) -> Tuple[Optional[str], Optional[str]]:
     
     return None, None
 
-def detect_encoding_with_charset_normalizer(raw_data: bytes) -> Dict[str, any]:
+def detect_encoding_with_charset_normalizer(raw_data: bytes) -> Dict[str, Any]:
     """
     charset-normalizer를 사용한 인코딩 감지 (가장 현대적)
     """
@@ -72,7 +72,7 @@ def detect_encoding_with_charset_normalizer(raw_data: bytes) -> Dict[str, any]:
     
     return {"encoding": None, "confidence": 0, "method": "charset-normalizer"}
 
-def detect_encoding_with_chardet(raw_data: bytes) -> Dict[str, any]:
+def detect_encoding_with_chardet(raw_data: bytes) -> Dict[str, Any]:
     """
     chardet를 사용한 인코딩 감지 (전통적인 방법)
     """
@@ -90,7 +90,7 @@ def detect_encoding_with_chardet(raw_data: bytes) -> Dict[str, any]:
     
     return {"encoding": None, "confidence": 0, "method": "chardet"}
 
-def fallback_encoding_detection(raw_data: bytes) -> Dict[str, any]:
+def fallback_encoding_detection(raw_data: bytes) -> Dict[str, Any]:
     """
     라이브러리가 없을 때 사용하는 폴백 방법
     기존의 휴리스틱 방법을 개선한 버전
@@ -166,7 +166,7 @@ def fallback_encoding_detection(raw_data: bytes) -> Dict[str, any]:
         "method": "fallback-unknown"
     }
 
-def detect_file_encoding(file_path: str, max_bytes: int = 8192) -> Dict[str, any]:
+def detect_file_encoding(file_path: str, max_bytes: int = 8192) -> Dict[str, Any]:
     """
     파일의 인코딩을 감지합니다.
     

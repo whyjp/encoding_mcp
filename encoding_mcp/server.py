@@ -14,9 +14,9 @@ from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
 import mcp.types as types
 
-# 로컬 모듈 import (절대 import로 수정)
+# 로컬 모듈 import
 try:
-    # 모듈로 실행될 때
+    # 패키지로 실행될 때
     from .encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
     from .file_operations import (
         create_empty_file, 
@@ -30,24 +30,14 @@ except ImportError:
     import sys
     import os
     sys.path.insert(0, os.path.dirname(__file__))
-    try:
-        from .encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
-        from .file_operations import (
-            create_empty_file, 
-            convert_file_encoding, 
-            get_file_info, 
-            list_supported_encodings,
-            get_encoding_info
-        )
-    except ImportError:
-        from encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
-        from file_operations import (
-            create_empty_file, 
-            convert_file_encoding, 
-            get_file_info, 
-            list_supported_encodings,
-            get_encoding_info
-        )
+    from encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
+    from file_operations import (
+        create_empty_file, 
+        convert_file_encoding, 
+        get_file_info, 
+        list_supported_encodings,
+        get_encoding_info
+    )
 
 def format_encoding_result(result: dict, file_path: str) -> str:
     """

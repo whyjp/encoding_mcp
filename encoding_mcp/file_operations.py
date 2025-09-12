@@ -8,7 +8,7 @@
 
 import os
 import shutil
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 # UTF-8 BOM 바이트
 UTF8_BOM = b'\xef\xbb\xbf'
@@ -59,7 +59,7 @@ def validate_encoding(encoding: str) -> bool:
     """
     return encoding in SUPPORTED_ENCODINGS
 
-def get_encoding_info(encoding: str) -> Optional[Dict[str, any]]:
+def get_encoding_info(encoding: str) -> Optional[Dict[str, Any]]:
     """
     인코딩 정보를 반환합니다.
     
@@ -319,7 +319,7 @@ def convert_file_encoding(file_path: str, target_encoding: str, backup: bool = T
     except Exception as e:
         return f"파일 변환 중 오류 발생: {str(e)}"
 
-def get_file_info(file_path: str) -> Dict[str, any]:
+def get_file_info(file_path: str) -> Dict[str, Any]:
     """
     파일의 기본 정보를 반환합니다.
     
@@ -349,7 +349,7 @@ def get_file_info(file_path: str) -> Dict[str, any]:
     except Exception as e:
         return {"error": f"파일 정보 조회 실패: {str(e)}"}
 
-def list_supported_encodings() -> Dict[str, Dict[str, any]]:
+def list_supported_encodings() -> Dict[str, Dict[str, Any]]:
     """
     지원하는 모든 인코딩 목록을 반환합니다.
     
