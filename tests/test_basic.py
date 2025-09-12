@@ -32,7 +32,8 @@ class TestBasicImport:
     
     def test_python_version(self):
         """Python 버전 호환성 테스트"""
-        assert sys.version_info >= (3, 9), "Python 3.9 이상이 필요합니다"
+        major, minor = sys.version_info[:2]
+        assert (major, minor) >= (3, 9), f"Python 3.9 이상이 필요합니다. 현재: {major}.{minor}"
     
     def test_basic_functionality(self):
         """기본 기능 테스트"""
