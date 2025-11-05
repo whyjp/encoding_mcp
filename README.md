@@ -7,6 +7,10 @@
 
 Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성하고 관리하는 전문적인 MCP (Model Context Protocol) 서버입니다.
 
+<a href="https://glama.ai/mcp/servers/@whyjp/encoding_mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@whyjp/encoding_mcp/badge" alt="Encoding Server MCP server" />
+</a>
+
 **🚀 [PyPI에서 설치](https://pypi.org/project/encoding-mcp/)**: `pip install encoding-mcp`
 
 ## ✨ v2.0 새로운 기능
