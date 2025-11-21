@@ -15,7 +15,7 @@ try:
     from ._version import __version__
 except ImportError:
     # Fallback for development installations
-    __version__ = "1.0.0"
+    __version__ = "2.0.1"
 __author__ = "Encoding MCP Team"
 __email__ = "whyj.park@gmail.com"
 __description__ = "MCP server for creating and managing UTF-8 with BOM encoded files required for Windows build environments"

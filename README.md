@@ -1,4 +1,4 @@
-# Encoding MCP Server v2.0
+# Encoding MCP Server v2.0.1
 
 [![PyPI version](https://badge.fury.io/py/encoding-mcp.svg)](https://pypi.org/project/encoding-mcp/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
@@ -9,7 +9,7 @@ Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성�
 
 **🚀 [PyPI에서 설치](https://pypi.org/project/encoding-mcp/)**: `pip install encoding-mcp`
 
-## ✨ v2.0 새로운 기능
+## ✨ v2.0.1 새로운 기능
 
 ### 🔧 **파일명/경로 분리 인터페이스**
 - Agent가 자연스럽게 현재 작업 디렉터리를 인식
@@ -385,4 +385,4 @@ write(
 
 ---
 
-**Encoding MCP v2.0** - Windows 개발 환경에서 인코딩 걱정 없는 완벽한 파일 관리! 🚀
+**Encoding MCP v2.0.1** - Windows 개발 환경에서 인코딩 걱정 없는 완벽한 파일 관리! 🚀

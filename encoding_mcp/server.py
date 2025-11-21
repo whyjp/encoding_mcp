@@ -2,13 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Encoding MCP Server v2.0
+Encoding MCP Server v2.0.1
 Modular version using professional encoding detection libraries
 """
+
+from __future__ import annotations
 
 import asyncio
 import sys
 import os
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import List
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
@@ -97,7 +102,7 @@ def get_system_info() -> str:
     detection_methods = get_available_detection_methods()
     supported_encodings = list_supported_encodings()
     
-    info_text = "🔧 Encoding MCP v2.0 System Information\n\n"
+    info_text = "🔧 Encoding MCP v2.0.1 System Information\n\n"
     
     # Detection methods
     info_text += "📊 Available encoding detection methods:\n"
@@ -119,7 +124,7 @@ def get_system_info() -> str:
 app = Server("encoding-mcp-v2")
 
 @app.list_tools()
-async def list_tools() -> list[Tool]:
+async def list_tools():
     """Return list of available tools."""
     return [
         Tool(
@@ -212,7 +217,7 @@ async def list_tools() -> list[Tool]:
     ]
 
 @app.call_tool()
-async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
+async def call_tool(name: str, arguments: dict):
     """Execute tool."""
     
     if name == "create_empty_file":
@@ -307,7 +312,7 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
 
 async def main():
     """Main execution function"""
-    print("🚀 Starting Encoding MCP v2.0 server...", file=sys.stderr)
+    print("🚀 Starting Encoding MCP v2.0.1 server...", file=sys.stderr)
     print("📚 Professional encoding detection library support", file=sys.stderr)
     
     # Run server via stdio
@@ -325,7 +330,10 @@ def cli_main():
     except KeyboardInterrupt:
         print("🛑 Server interrupted.", file=sys.stderr)
     except Exception as e:
+        import traceback
         print(f"💥 Server error: {e}", file=sys.stderr)
+        print("Full traceback:", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":

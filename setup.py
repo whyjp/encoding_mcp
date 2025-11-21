@@ -16,7 +16,7 @@ def read_requirements():
 
 setup(
     name="encoding-mcp",
-    version="1.0.0",
+    version="2.0.1",
     author="Encoding MCP Team",
     author_email="whyj.park@gmail.com",
     description="MCP server for creating and managing UTF-8 with BOM encoded files required for Windows build environments",
