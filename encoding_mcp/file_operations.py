@@ -250,7 +250,7 @@ def read_file_with_encoding(file_path: str, source_encoding: str) -> tuple[str, 
     except Exception as e:
         return "", f"Error reading file: {str(e)}"
 
-def convert_file_encoding(file_path: str, target_encoding: str, backup: bool = True) -> str:
+def convert_file_encoding(file_path: str, target_encoding: str, backup: bool = False) -> str:
     """
     Convert file encoding.
     

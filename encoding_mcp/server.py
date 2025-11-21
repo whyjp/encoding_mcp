@@ -194,7 +194,7 @@ async def list_tools() -> list[Tool]:
                     "backup": {
                         "type": "boolean",
                         "description": "Whether to backup original file",
-                        "default": True
+                        "default": False
                     }
                 },
                 "required": ["file_name", "directory_path"]
@@ -270,7 +270,7 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         file_name = arguments.get("file_name", "")
         directory_path = arguments.get("directory_path", "")
         target_encoding = arguments.get("target_encoding", "utf-8-bom")
-        backup = arguments.get("backup", True)
+        backup = arguments.get("backup", False)
         
         # Combine file name and directory path
         file_path = os.path.join(directory_path, file_name)

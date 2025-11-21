@@ -52,7 +52,7 @@ Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성�
 - `file_name`: 변환할 파일명 (예: hello.cpp, test.h)
 - `directory_path`: 파일이 있는 디렉터리의 절대 경로
 - `target_encoding`: 목표 인코딩 (utf-8-bom, utf-8, cp949, euc-kr, ascii)
-- `backup`: 원본 파일 백업 여부 (기본값: true)
+- `backup`: 원본 파일 백업 여부 (기본값: false)
 
 ### ℹ️ **get_system_info**
 Encoding MCP 시스템 정보를 확인합니다. 사용 가능한 라이브러리와 지원 인코딩을 보여줍니다.
@@ -184,7 +184,7 @@ mcp_encoding_convert_file_encoding(
     file_name="hello.cpp",
     directory_path="D:/my_project/src",
     target_encoding="utf-8",
-    backup=true
+    backup=false
 )
 ```
 
