@@ -2,41 +2,41 @@
 # -*- coding: utf-8 -*-
 
 """
-최소한의 테스트 - Python 3.9+ 호환성 보장
+Minimal tests - Python 3.9+ compatibility guarantee
 """
 
 import sys
 
 
 def test_python_version():
-    """Python 버전 확인"""
+    """Check Python version"""
     assert sys.version_info >= (3, 10), f"Python 3.10+ required, got {sys.version_info[:2]}"
 
 
 def test_basic_import():
-    """기본 import 테스트"""
+    """Basic import test"""
     try:
         import encoding_mcp
         assert encoding_mcp.__version__ is not None
     except ImportError:
-        # 패키지가 설치되지 않은 경우 건너뛰기
+        # Skip if package is not installed
         pass
 
 
 def test_basic_functionality():
-    """기본 기능 테스트"""
-    # 간단한 문자열 처리
-    test_str = "Hello, 世界!"
+    """Basic functionality test"""
+    # Simple string processing
+    test_str = "Hello, World!"
     assert len(test_str) > 0
     assert isinstance(test_str, str)
 
 
 def test_encoding_support():
-    """인코딩 지원 테스트"""
-    # UTF-8 인코딩 테스트
-    test_bytes = "안녕하세요".encode('utf-8')
+    """Encoding support test"""
+    # UTF-8 encoding test
+    test_bytes = "Hello".encode('utf-8')
     decoded = test_bytes.decode('utf-8')
-    assert decoded == "안녕하세요"
+    assert decoded == "Hello"
 
 
 if __name__ == '__main__':

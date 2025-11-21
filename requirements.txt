@@ -1,4 +1,4 @@
 mcp>=1.0.0
-# 인코딩 감지 라이브러리 (Python 3.9 호환 버전)
+# Encoding detection libraries (Python 3.9 compatible versions)
 charset-normalizer>=3.0.0,<4.0.0
 chardet>=5.0.0,<6.0.0

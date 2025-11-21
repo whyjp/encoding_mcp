@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Encoding MCP 모듈 실행 엔트리 포인트
-python -m encoding_mcp 로 실행할 때 사용됩니다.
+Encoding MCP module execution entry point
+Used when running with python -m encoding_mcp
 """
 
 from .server import cli_main

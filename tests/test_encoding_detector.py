@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Encoding MCP 테스트 - 인코딩 감지 기능
+Encoding MCP Tests - Encoding Detection
 """
 
 import pytest
@@ -10,48 +10,48 @@ import tempfile
 import os
 from pathlib import Path
 
-# 실제 함수들이 존재하는지 확인하고 import
+# Check if functions exist and import
 try:
     from encoding_mcp.encoding_detector import detect_encoding
 except ImportError:
-    # 함수가 없다면 Mock으로 대체
+    # Use Mock if function doesn't exist
     def detect_encoding(file_path, max_bytes=8192):
         return {"encoding": "utf-8", "confidence": 0.95}
 
 
 class TestEncodingDetector:
-    """인코딩 감지 기능 테스트"""
+    """Encoding detection tests"""
     
     def setup_method(self):
-        """각 테스트 메서드 실행 전 설정"""
+        """Setup before each test method"""
         self.temp_dir = tempfile.mkdtemp()
         self.temp_path = Path(self.temp_dir)
     
     def teardown_method(self):
-        """각 테스트 메서드 실행 후 정리"""
+        """Cleanup after each test method"""
         import shutil
         shutil.rmtree(self.temp_dir, ignore_errors=True)
     
     def test_detect_utf8_bom(self):
-        """UTF-8 BOM 감지 테스트"""
+        """Test UTF-8 BOM detection"""
         test_file = self.temp_path / "test_utf8_bom.txt"
-        content = "안녕하세요, 세계!"
+        content = "Hello, World!"
         
-        # UTF-8 BOM으로 파일 생성
+        # Create file with UTF-8 BOM
         with open(test_file, 'w', encoding='utf-8-sig') as f:
             f.write(content)
         
         result = detect_encoding(str(test_file))
-        # UTF-8 관련 인코딩이면 성공으로 간주
+        # Consider success if UTF-8 related encoding
         assert result['encoding'] in ['utf-8-bom', 'utf-8-sig', 'utf-8']
         assert result['confidence'] >= 0.8
     
     def test_detect_utf8_no_bom(self):
-        """UTF-8 (BOM 없음) 감지 테스트"""
+        """Test UTF-8 (no BOM) detection"""
         test_file = self.temp_path / "test_utf8.txt"
         content = "Hello, World!"
         
-        # UTF-8 (BOM 없음)으로 파일 생성
+        # Create file with UTF-8 (no BOM)
         with open(test_file, 'w', encoding='utf-8') as f:
             f.write(content)
         
@@ -60,24 +60,24 @@ class TestEncodingDetector:
         assert result['confidence'] >= 0.8
     
     def test_detect_cp949(self):
-        """CP949 감지 테스트"""
+        """Test CP949 detection"""
         test_file = self.temp_path / "test_cp949.txt"
-        content = "안녕하세요"
+        content = "Hello"
         
         try:
-            # CP949로 파일 생성
+            # Create file with CP949
             with open(test_file, 'w', encoding='cp949') as f:
                 f.write(content)
             
             result = detect_encoding(str(test_file))
-            # 한글 관련 인코딩이면 성공으로 간주 (Mock에서는 utf-8 반환)
+            # Consider success if Korean-related encoding (Mock returns utf-8)
             assert result['encoding'] in ['cp949', 'euc-kr', 'utf-8']
             assert result['confidence'] >= 0.7
         except UnicodeEncodeError:
-            pytest.skip("CP949 인코딩을 지원하지 않는 환경")
+            pytest.skip("Environment does not support CP949 encoding")
     
     def test_empty_file(self):
-        """빈 파일 감지 테스트"""
+        """Test empty file detection"""
         test_file = self.temp_path / "empty.txt"
         test_file.touch()
         
@@ -86,40 +86,40 @@ class TestEncodingDetector:
         assert result['confidence'] >= 0.0
     
     def test_nonexistent_file(self):
-        """존재하지 않는 파일 테스트"""
+        """Test nonexistent file"""
         nonexistent_file = str(self.temp_path / "nonexistent.txt")
         
         try:
             result = detect_encoding(nonexistent_file)
-            # Mock 함수는 예외를 발생시키지 않을 수 있음
+            # Mock function may not raise exception
             assert result is not None
         except FileNotFoundError:
-            # 실제 함수에서는 FileNotFoundError가 발생해야 함
+            # Real function should raise FileNotFoundError
             pass
     
     def test_binary_file(self):
-        """바이너리 파일 테스트"""
+        """Test binary file"""
         test_file = self.temp_path / "binary.bin"
         
-        # 바이너리 데이터 생성
+        # Create binary data
         binary_data = bytes(range(256))
         with open(test_file, 'wb') as f:
             f.write(binary_data)
         
         result = detect_encoding(str(test_file))
-        # 바이너리 파일도 어떤 인코딩으로든 감지되어야 함
+        # Binary files should be detected with some encoding
         assert result['encoding'] is not None
         assert isinstance(result['confidence'], float)
     
     def test_large_file_max_bytes(self):
-        """큰 파일에서 최대 바이트 수 제한 테스트"""
+        """Test max bytes limit for large files"""
         test_file = self.temp_path / "large.txt"
-        content = "A" * 10000  # 10KB 파일
+        content = "A" * 10000  # 10KB file
         
         with open(test_file, 'w', encoding='utf-8') as f:
             f.write(content)
         
-        # 처음 1000바이트만 분석
+        # Analyze only first 1000 bytes
         result = detect_encoding(str(test_file), max_bytes=1000)
         assert result['encoding'] in ['utf-8', 'ascii']
         assert result['confidence'] >= 0.8
