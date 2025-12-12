@@ -1,4 +1,4 @@
-# Encoding MCP Server v2.0
+# Encoding MCP Server v2.0.1
 
 [![PyPI version](https://badge.fury.io/py/encoding-mcp.svg)](https://pypi.org/project/encoding-mcp/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
@@ -7,13 +7,9 @@
 
 Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성하고 관리하는 전문적인 MCP (Model Context Protocol) 서버입니다.
 
-<a href="https://glama.ai/mcp/servers/@whyjp/encoding_mcp">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@whyjp/encoding_mcp/badge" alt="Encoding Server MCP server" />
-</a>
-
 **🚀 [PyPI에서 설치](https://pypi.org/project/encoding-mcp/)**: `pip install encoding-mcp`
 
-## ✨ v2.0 새로운 기능
+## ✨ v2.0.1 새로운 기능
 
 ### 🔧 **파일명/경로 분리 인터페이스**
 - Agent가 자연스럽게 현재 작업 디렉터리를 인식
@@ -56,7 +52,7 @@ Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성�
 - `file_name`: 변환할 파일명 (예: hello.cpp, test.h)
 - `directory_path`: 파일이 있는 디렉터리의 절대 경로
 - `target_encoding`: 목표 인코딩 (utf-8-bom, utf-8, cp949, euc-kr, ascii)
-- `backup`: 원본 파일 백업 여부 (기본값: true)
+- `backup`: 원본 파일 백업 여부 (기본값: false)
 
 ### ℹ️ **get_system_info**
 Encoding MCP 시스템 정보를 확인합니다. 사용 가능한 라이브러리와 지원 인코딩을 보여줍니다.
@@ -188,7 +184,7 @@ mcp_encoding_convert_file_encoding(
     file_name="hello.cpp",
     directory_path="D:/my_project/src",
     target_encoding="utf-8",
-    backup=true
+    backup=false
 )
 ```
 
@@ -389,4 +385,4 @@ write(
 
 ---
 
-**Encoding MCP v2.0** - Windows 개발 환경에서 인코딩 걱정 없는 완벽한 파일 관리! 🚀
+**Encoding MCP v2.0.1** - Windows 개발 환경에서 인코딩 걱정 없는 완벽한 파일 관리! 🚀

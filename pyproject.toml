@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "encoding-mcp"
 dynamic = ["version"]
-description = "Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성하고 관리하는 MCP 서버"
+description = "MCP server for creating and managing UTF-8 with BOM encoded files required for Windows build environments"
 authors = [
     {name = "Encoding MCP Team", email = "whyj.park@gmail.com"}
 ]
@@ -88,7 +88,7 @@ extend-exclude = '''
 
 [tool.mypy]
 python_version = "3.10"
-# 개발 단계에서는 매우 관대하게 설정
+# Very permissive settings for development stage
 warn_return_any = false
 warn_unused_configs = false
 disallow_untyped_defs = false
@@ -101,7 +101,7 @@ warn_unused_ignores = false
 warn_no_return = false
 warn_unreachable = false
 strict_equality = false
-# 모든 오류 무시
+# Ignore all errors
 ignore_missing_imports = true
 ignore_errors = true
 

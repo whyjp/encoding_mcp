@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-릴리스 생성 스크립트
-새로운 버전 태그를 생성하고 GitHub에 푸시하여 자동 배포를 트리거합니다.
+Release creation script
+Create a new version tag and push to GitHub to trigger automatic deployment.
 """
 
 import subprocess
@@ -13,9 +13,9 @@ from pathlib import Path
 
 
 def run_command(cmd, description=""):
-    """명령어 실행"""
+    """Execute command"""
     print(f"\n🔨 {description}")
-    print(f"실행: {' '.join(cmd)}")
+    print(f"Executing: {' '.join(cmd)}")
     
     try:
         result = subprocess.run(cmd, check=True, capture_output=True, text=True)
@@ -23,7 +23,7 @@ def run_command(cmd, description=""):
             print(result.stdout.strip())
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        print(f"❌ 오류 발생: {e}")
+        print(f"❌ Error occurred: {e}")
         if e.stdout:
             print(f"STDOUT: {e.stdout}")
         if e.stderr:
@@ -32,15 +32,15 @@ def run_command(cmd, description=""):
 
 
 def get_current_version():
-    """현재 버전 가져오기"""
+    """Get current version"""
     try:
-        # Git 태그에서 버전 가져오기
+        # Get version from Git tags
         result = subprocess.run(['git', 'describe', '--tags', '--abbrev=0'], 
                               capture_output=True, text=True)
         if result.returncode == 0:
             return result.stdout.strip().lstrip('v')
         else:
-            # 태그가 없으면 __init__.py에서 가져오기
+            # Get from __init__.py if no tags
             init_file = Path('encoding_mcp/__init__.py')
             if init_file.exists():
                 content = init_file.read_text(encoding='utf-8')
@@ -48,27 +48,27 @@ def get_current_version():
                 if match:
                     return match.group(1)
     except Exception as e:
-        print(f"버전 확인 중 오류: {e}")
+        print(f"Error checking version: {e}")
     
     return "0.0.0"
 
 
 def get_git_tags():
-    """Git 태그 목록 가져오기"""
-    result = run_command(['git', 'tag', '--list'], "기존 태그 목록 조회")
+    """Get Git tag list"""
+    result = run_command(['git', 'tag', '--list'], "Query existing tags")
     if result:
         return result.split('\n')
     return []
 
 
 def validate_version(version):
-    """버전 형식 검증"""
+    """Validate version format"""
     pattern = r'^\d+\.\d+\.\d+(?:-[a-zA-Z0-9]+)?$'
     return re.match(pattern, version) is not None
 
 
 def increment_version(version, part='patch'):
-    """버전 증가"""
+    """Increment version"""
     parts = version.split('.')
     if len(parts) != 3:
         return None
@@ -89,119 +89,119 @@ def increment_version(version, part='patch'):
 
 
 def check_git_status():
-    """Git 상태 확인"""
-    print("\n📋 Git 상태 확인")
+    """Check Git status"""
+    print("\n📋 Checking Git status")
     
-    # 현재 브랜치 확인
-    branch = run_command(['git', 'branch', '--show-current'], "현재 브랜치 확인")
+    # Check current branch
+    branch = run_command(['git', 'branch', '--show-current'], "Check current branch")
     if not branch:
         return False
     
-    print(f"현재 브랜치: {branch}")
+    print(f"Current branch: {branch}")
     
-    # 변경사항 확인
-    status = run_command(['git', 'status', '--porcelain'], "변경사항 확인")
+    # Check for changes
+    status = run_command(['git', 'status', '--porcelain'], "Check for changes")
     if status:
-        print("❌ 커밋되지 않은 변경사항이 있습니다:")
+        print("❌ Uncommitted changes found:")
         print(status)
         return False
     
-    # 원격 저장소와 동기화 확인
+    # Check sync with remote
     result = subprocess.run(['git', 'fetch'], capture_output=True)
     if result.returncode != 0:
-        print("❌ 원격 저장소에서 가져오기 실패")
+        print("❌ Failed to fetch from remote repository")
         return False
     
-    # 로컬과 원격 차이 확인
-    behind = run_command(['git', 'rev-list', '--count', 'HEAD..@{u}'], "원격 저장소와 비교")
+    # Check local vs remote difference
+    behind = run_command(['git', 'rev-list', '--count', 'HEAD..@{u}'], "Compare with remote")
     if behind and behind != '0':
-        print(f"❌ 원격 저장소보다 {behind} 커밋 뒤처져 있습니다.")
-        print("git pull을 실행하세요.")
+        print(f"❌ Local is {behind} commits behind remote.")
+        print("Please run git pull.")
         return False
     
-    print("✅ Git 상태 정상")
+    print("✅ Git status is clean")
     return True
 
 
 def create_release():
-    """릴리스 생성"""
-    print("🚀 Encoding MCP 릴리스 생성 스크립트")
+    """Create release"""
+    print("🚀 Encoding MCP Release Creation Script")
     print("=" * 50)
     
-    # 프로젝트 루트 확인
+    # Check if project root
     if not Path('pyproject.toml').exists():
-        print("❌ pyproject.toml 파일이 없습니다. 프로젝트 루트에서 실행하세요.")
+        print("❌ pyproject.toml file not found. Please run from project root.")
         return False
     
-    # Git 상태 확인
+    # Check Git status
     if not check_git_status():
         return False
     
-    # 현재 버전 확인
+    # Get current version
     current_version = get_current_version()
-    print(f"\n📌 현재 버전: {current_version}")
+    print(f"\n📌 Current version: {current_version}")
     
-    # 기존 태그 표시
+    # Show existing tags
     tags = get_git_tags()
     if tags and tags != ['']:
-        print(f"기존 태그: {', '.join(tags[-5:])}")  # 최근 5개만 표시
+        print(f"Existing tags: {', '.join(tags[-5:])}")  # Show last 5 only
     
-    # 새 버전 입력
-    print("\n새 버전을 입력하세요:")
-    print("1. 직접 입력 (예: 1.2.0)")
-    print("2. 자동 증가:")
-    print(f"   - patch (현재: {current_version} → {increment_version(current_version, 'patch')})")
-    print(f"   - minor (현재: {current_version} → {increment_version(current_version, 'minor')})")
-    print(f"   - major (현재: {current_version} → {increment_version(current_version, 'major')})")
+    # Get new version input
+    print("\nEnter new version:")
+    print("1. Direct input (e.g., 1.2.0)")
+    print("2. Auto increment:")
+    print(f"   - patch (current: {current_version} → {increment_version(current_version, 'patch')})")
+    print(f"   - minor (current: {current_version} → {increment_version(current_version, 'minor')})")
+    print(f"   - major (current: {current_version} → {increment_version(current_version, 'major')})")
     
-    choice = input("\n선택하세요 (버전 번호 또는 patch/minor/major): ").strip()
+    choice = input("\nSelect (version number or patch/minor/major): ").strip()
     
     if choice in ['patch', 'minor', 'major']:
         new_version = increment_version(current_version, choice)
     elif validate_version(choice):
         new_version = choice
     else:
-        print("❌ 잘못된 버전 형식입니다.")
+        print("❌ Invalid version format.")
         return False
     
     if not new_version:
-        print("❌ 버전 생성 실패")
+        print("❌ Failed to generate version")
         return False
     
-    # 태그 중복 확인
+    # Check tag duplication
     tag_name = f"v{new_version}"
     if tag_name in tags:
-        print(f"❌ 태그 {tag_name}가 이미 존재합니다.")
+        print(f"❌ Tag {tag_name} already exists.")
         return False
     
-    # 확인
-    print(f"\n📋 릴리스 정보:")
-    print(f"   버전: {new_version}")
-    print(f"   태그: {tag_name}")
+    # Confirm
+    print(f"\n📋 Release information:")
+    print(f"   Version: {new_version}")
+    print(f"   Tag: {tag_name}")
     
-    confirm = input("\n릴리스를 생성하시겠습니까? (y/N): ").strip().lower()
+    confirm = input("\nCreate release? (y/N): ").strip().lower()
     if confirm != 'y':
-        print("취소되었습니다.")
+        print("Cancelled.")
         return False
     
-    # 태그 생성
+    # Create tag
     tag_message = f"Release version {new_version}"
-    if not run_command(['git', 'tag', '-a', tag_name, '-m', tag_message], f"태그 {tag_name} 생성"):
+    if not run_command(['git', 'tag', '-a', tag_name, '-m', tag_message], f"Create tag {tag_name}"):
         return False
     
-    # 태그 푸시
-    if not run_command(['git', 'push', 'origin', tag_name], f"태그 {tag_name} 푸시"):
-        print("❌ 태그 푸시 실패. 로컬 태그를 삭제합니다.")
+    # Push tag
+    if not run_command(['git', 'push', 'origin', tag_name], f"Push tag {tag_name}"):
+        print("❌ Failed to push tag. Deleting local tag.")
         subprocess.run(['git', 'tag', '-d', tag_name])
         return False
     
-    print(f"\n✅ 릴리스 {tag_name} 생성 완료!")
-    print("\n🔄 GitHub Actions 워크플로우가 자동으로 실행됩니다:")
-    print("1. 테스트 실행")
-    print("2. 패키지 빌드")
-    print("3. PyPI 배포")
+    print(f"\n✅ Release {tag_name} created successfully!")
+    print("\n🔄 GitHub Actions workflow will run automatically:")
+    print("1. Run tests")
+    print("2. Build package")
+    print("3. Deploy to PyPI")
     
-    print(f"\n🌐 GitHub에서 진행 상황을 확인하세요:")
+    print(f"\n🌐 Check progress on GitHub:")
     print("https://github.com/whyjp/encoding_mcp/actions")
     
     return True
@@ -212,8 +212,8 @@ if __name__ == '__main__':
         success = create_release()
         sys.exit(0 if success else 1)
     except KeyboardInterrupt:
-        print("\n\n⏹️ 사용자에 의해 중단되었습니다.")
+        print("\n\n⏹️ Interrupted by user.")
         sys.exit(1)
     except Exception as e:
-        print(f"\n❌ 예상치 못한 오류: {e}")
+        print(f"\n❌ Unexpected error: {e}")
         sys.exit(1)

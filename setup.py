@@ -4,22 +4,22 @@
 from setuptools import setup, find_packages
 import os
 
-# README 파일 읽기
+# Read README file
 def read_readme():
     with open("README.md", "r", encoding="utf-8") as f:
         return f.read()
 
-# requirements.txt 파일 읽기
+# Read requirements.txt file
 def read_requirements():
     with open("requirements.txt", "r", encoding="utf-8") as f:
         return [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
 setup(
     name="encoding-mcp",
-    version="1.0.0",
+    version="2.0.1",
     author="Encoding MCP Team",
     author_email="whyj.park@gmail.com",
-    description="Windows 빌드 환경에서 필요한 UTF-8 with BOM 인코딩 파일을 생성하고 관리하는 MCP 서버",
+    description="MCP server for creating and managing UTF-8 with BOM encoded files required for Windows build environments",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     url="https://github.com/whyjp/encoding_mcp",

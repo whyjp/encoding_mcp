@@ -2,21 +2,26 @@
 # -*- coding: utf-8 -*-
 
 """
-Encoding MCP Server v2.0
-모듈화되고 전문적인 인코딩 감지 라이브러리를 사용하는 버전
+Encoding MCP Server v2.0.1
+Modular version using professional encoding detection libraries
 """
+
+from __future__ import annotations
 
 import asyncio
 import sys
 import os
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import List
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
 import mcp.types as types
 
-# 로컬 모듈 import
+# Import local modules
 try:
-    # 패키지로 실행될 때
+    # When run as package
     from .encoding_detector import detect_file_encoding, get_available_detection_methods, get_recommended_libraries
     from .file_operations import (
         create_empty_file, 
@@ -26,7 +31,7 @@ try:
         get_encoding_info
     )
 except ImportError:
-    # 직접 실행될 때
+    # When run directly
     import sys
     import os
     sys.path.insert(0, os.path.dirname(__file__))
@@ -41,104 +46,104 @@ except ImportError:
 
 def format_encoding_result(result: dict, file_path: str) -> str:
     """
-    인코딩 감지 결과를 포맷팅합니다.
+    Format encoding detection result.
     
     Args:
-        result: 인코딩 감지 결과
-        file_path: 파일 경로
+        result: Encoding detection result
+        file_path: File path
         
     Returns:
-        str: 포맷팅된 결과 문자열
+        str: Formatted result string
     """
     if "error" in result:
         return f"❌ {result['error']}"
     
-    response_text = f"📋 파일 인코딩 정보: {os.path.basename(file_path)}\n\n"
-    response_text += f"🔤 인코딩: {result['encoding']}\n"
-    response_text += f"📏 파일 크기: {result['file_size']} bytes\n"
+    response_text = f"📋 File encoding information: {os.path.basename(file_path)}\n\n"
+    response_text += f"🔤 Encoding: {result['encoding']}\n"
+    response_text += f"📏 File size: {result['file_size']} bytes\n"
     
     if result['has_bom']:
-        response_text += f"🏷️  BOM: 있음 ({result['bom_type']})\n"
+        response_text += f"🏷️  BOM: Yes ({result['bom_type']})\n"
     else:
-        response_text += f"🏷️  BOM: 없음\n"
+        response_text += f"🏷️  BOM: No\n"
     
-    response_text += f"🎯 신뢰도: {result['confidence']}%\n"
-    response_text += f"🔧 감지 방법: {result.get('method', 'unknown')}\n"
+    response_text += f"🎯 Confidence: {result['confidence']}%\n"
+    response_text += f"🔧 Detection method: {result.get('method', 'unknown')}\n"
     
     if 'language' in result and result['language'] != 'unknown':
-        response_text += f"🌍 언어: {result['language']}\n"
+        response_text += f"🌍 Language: {result['language']}\n"
     
     if result.get('first_bytes'):
-        response_text += f"🔍 처음 16바이트 (hex): {result['first_bytes']}\n"
+        response_text += f"🔍 First 16 bytes (hex): {result['first_bytes']}\n"
     
-    # Windows 빌드 호환성 조언
+    # Windows build compatibility advice
     encoding = result['encoding']
     encoding_info = get_encoding_info(encoding)
     
     if encoding == "utf-8-bom":
-        response_text += "\n✅ Windows C++/PowerShell 빌드에 적합한 인코딩입니다."
+        response_text += "\n✅ Suitable encoding for Windows C++/PowerShell builds."
     elif encoding == "utf-8":
-        response_text += "\n⚠️  UTF-8 without BOM - Windows C++/PowerShell에서 문제가 될 수 있습니다."
+        response_text += "\n⚠️  UTF-8 without BOM - May cause issues in Windows C++/PowerShell."
     elif encoding in ["cp949", "euc-kr"]:
-        response_text += "\n⚠️  한글 인코딩 - UTF-8 with BOM으로 변환을 권장합니다."
+        response_text += "\n⚠️  Korean encoding - Recommend converting to UTF-8 with BOM."
     elif encoding == "ascii":
-        response_text += "\n✅ ASCII 인코딩 - 호환성 문제 없음."
+        response_text += "\n✅ ASCII encoding - No compatibility issues."
     elif encoding_info and encoding_info.get('windows_friendly'):
-        response_text += "\n✅ Windows 호환 인코딩입니다."
+        response_text += "\n✅ Windows-compatible encoding."
     else:
-        response_text += "\n❓ 알 수 없는 인코딩 - UTF-8 with BOM으로 변환을 고려하세요."
+        response_text += "\n❓ Unknown encoding - Consider converting to UTF-8 with BOM."
     
     return response_text
 
 def get_system_info() -> str:
     """
-    시스템 정보를 반환합니다.
+    Return system information.
     """
     detection_methods = get_available_detection_methods()
     supported_encodings = list_supported_encodings()
     
-    info_text = "🔧 Encoding MCP v2.0 시스템 정보\n\n"
+    info_text = "🔧 Encoding MCP v2.0.1 System Information\n\n"
     
-    # 감지 방법
-    info_text += "📊 사용 가능한 인코딩 감지 방법:\n"
+    # Detection methods
+    info_text += "📊 Available encoding detection methods:\n"
     for method, available in detection_methods.items():
         status = "✅" if available else "❌"
         info_text += f"  {status} {method}\n"
     
-    info_text += f"\n📚 권장 라이브러리:\n{get_recommended_libraries()}\n\n"
+    info_text += f"\n📚 Recommended libraries:\n{get_recommended_libraries()}\n\n"
     
-    # 지원 인코딩
-    info_text += "🎯 지원하는 인코딩:\n"
+    # Supported encodings
+    info_text += "🎯 Supported encodings:\n"
     for encoding, info in supported_encodings.items():
         windows_icon = "🪟" if info['windows_friendly'] else "🐧"
         info_text += f"  {windows_icon} {encoding}: {info['name']}\n"
     
     return info_text
 
-# 서버 인스턴스 생성
+# Create server instance
 app = Server("encoding-mcp-v2")
 
 @app.list_tools()
-async def list_tools() -> list[Tool]:
-    """사용 가능한 도구 목록을 반환합니다."""
+async def list_tools():
+    """Return list of available tools."""
     return [
         Tool(
             name="create_empty_file",
-            description="지정된 인코딩으로 빈 파일을 생성합니다. Agent가 내용을 채울 수 있도록 빈 파일만 생성합니다.",
+            description="Create an empty file with specified encoding. Creates only an empty file so Agent can fill in content.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "file_name": {
                         "type": "string",
-                        "description": "생성할 파일명 (예: hello.cpp, test.h)"
+                        "description": "File name to create (e.g., hello.cpp, test.h)"
                     },
                     "directory_path": {
                         "type": "string", 
-                        "description": "파일을 생성할 디렉터리의 절대 경로"
+                        "description": "Absolute path of directory to create file in"
                     },
                     "encoding": {
                         "type": "string",
-                        "description": "파일 인코딩",
+                        "description": "File encoding",
                         "enum": ["utf-8-bom", "utf-8", "cp949", "euc-kr", "ascii"],
                         "default": "utf-8-bom"
                     }
@@ -148,21 +153,21 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="detect_file_encoding",
-            description="전문적인 라이브러리를 사용하여 파일의 인코딩을 정확하게 감지합니다.",
+            description="Accurately detect file encoding using professional libraries.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "file_name": {
                         "type": "string",
-                        "description": "확인할 파일명 (예: hello.cpp, test.h)"
+                        "description": "File name to check (e.g., hello.cpp, test.h)"
                     },
                     "directory_path": {
                         "type": "string",
-                        "description": "파일이 있는 디렉터리의 절대 경로"
+                        "description": "Absolute path of directory containing the file"
                     },
                     "max_bytes": {
                         "type": "integer",
-                        "description": "분석할 최대 바이트 수 (기본값: 8192)",
+                        "description": "Maximum bytes to analyze (default: 8192)",
                         "default": 8192,
                         "minimum": 512,
                         "maximum": 65536
@@ -173,28 +178,28 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="convert_file_encoding",
-            description="파일을 지정된 인코딩으로 변환합니다. 자동 백업 지원.",
+            description="Convert file to specified encoding. Automatic backup support.",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "file_name": {
                         "type": "string",
-                        "description": "변환할 파일명 (예: hello.cpp, test.h)"
+                        "description": "File name to convert (e.g., hello.cpp, test.h)"
                     },
                     "directory_path": {
                         "type": "string",
-                        "description": "파일이 있는 디렉터리의 절대 경로"
+                        "description": "Absolute path of directory containing the file"
                     },
                     "target_encoding": {
                         "type": "string",
-                        "description": "목표 인코딩",
+                        "description": "Target encoding",
                         "enum": ["utf-8-bom", "utf-8", "cp949", "euc-kr", "ascii"],
                         "default": "utf-8-bom"
                     },
                     "backup": {
                         "type": "boolean",
-                        "description": "원본 파일 백업 여부",
-                        "default": True
+                        "description": "Whether to backup original file",
+                        "default": False
                     }
                 },
                 "required": ["file_name", "directory_path"]
@@ -202,7 +207,7 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="get_system_info",
-            description="Encoding MCP 시스템 정보를 확인합니다. 사용 가능한 라이브러리와 지원 인코딩을 보여줍니다.",
+            description="Check Encoding MCP system information. Shows available libraries and supported encodings.",
             inputSchema={
                 "type": "object",
                 "properties": {},
@@ -212,23 +217,23 @@ async def list_tools() -> list[Tool]:
     ]
 
 @app.call_tool()
-async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
-    """도구를 실행합니다."""
+async def call_tool(name: str, arguments: dict):
+    """Execute tool."""
     
     if name == "create_empty_file":
         file_name = arguments.get("file_name", "")
         directory_path = arguments.get("directory_path", "")
         encoding = arguments.get("encoding", "utf-8-bom")
         
-        # 파일명과 디렉터리 경로 결합
+        # Combine file name and directory path
         file_path = os.path.join(directory_path, file_name)
         
         result = create_empty_file(file_path, encoding)
         
-        # 결과에 따른 이모지 선택
-        if "성공" in result:
+        # Select icon based on result
+        if "successfully" in result.lower() or "success" in result.lower():
             icon = "✅"
-        elif "권한" in result or "실패" in result:
+        elif "permission" in result.lower() or "failed" in result.lower() or "error" in result.lower():
             icon = "❌"
         else:
             icon = "⚠️"
@@ -236,7 +241,7 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         return [
             types.TextContent(
                 type="text",
-                text=f"{icon} 빈 파일 생성\n\n{result}\n\n💡 Agent가 write 도구를 사용하여 내용을 채워넣을 수 있습니다."
+                text=f"{icon} Create empty file\n\n{result}\n\n💡 Agent can use write tool to fill in content."
             )
         ]
     
@@ -249,11 +254,11 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
             return [
                 types.TextContent(
                     type="text",
-                    text="❌ 파일명과 디렉터리 경로가 모두 필요합니다."
+                    text="❌ Both file name and directory path are required."
                 )
             ]
         
-        # 파일명과 디렉터리 경로 결합
+        # Combine file name and directory path
         file_path = os.path.join(directory_path, file_name)
         
         result = detect_file_encoding(file_path, max_bytes)
@@ -270,17 +275,17 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         file_name = arguments.get("file_name", "")
         directory_path = arguments.get("directory_path", "")
         target_encoding = arguments.get("target_encoding", "utf-8-bom")
-        backup = arguments.get("backup", True)
+        backup = arguments.get("backup", False)
         
-        # 파일명과 디렉터리 경로 결합
+        # Combine file name and directory path
         file_path = os.path.join(directory_path, file_name)
         
         result = convert_file_encoding(file_path, target_encoding, backup)
         
-        # 결과에 따른 이모지 선택
-        if "완료" in result:
+        # Select icon based on result
+        if "completed" in result.lower() or "complete" in result.lower():
             icon = "✅"
-        elif "실패" in result or "오류" in result:
+        elif "failed" in result.lower() or "error" in result.lower():
             icon = "❌"
         else:
             icon = "ℹ️"
@@ -288,7 +293,7 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         return [
             types.TextContent(
                 type="text",
-                text=f"{icon} 인코딩 변환\n\n{result}"
+                text=f"{icon} Encoding conversion\n\n{result}"
             )
         ]
     
@@ -303,14 +308,14 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         ]
     
     else:
-        raise ValueError(f"알 수 없는 도구입니다: {name}")
+        raise ValueError(f"Unknown tool: {name}")
 
 async def main():
-    """메인 실행 함수"""
-    print("🚀 Encoding MCP v2.0 서버 시작 중...", file=sys.stderr)
-    print("📚 전문적인 인코딩 감지 라이브러리 지원", file=sys.stderr)
+    """Main execution function"""
+    print("🚀 Starting Encoding MCP v2.0.1 server...", file=sys.stderr)
+    print("📚 Professional encoding detection library support", file=sys.stderr)
     
-    # stdio를 통해 서버 실행
+    # Run server via stdio
     async with stdio_server() as (read_stream, write_stream):
         await app.run(
             read_stream,
@@ -319,13 +324,16 @@ async def main():
         )
 
 def cli_main():
-    """CLI 엔트리 포인트"""
+    """CLI entry point"""
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("🛑 서버가 중단되었습니다.", file=sys.stderr)
+        print("🛑 Server interrupted.", file=sys.stderr)
     except Exception as e:
-        print(f"💥 서버 실행 중 오류: {e}", file=sys.stderr)
+        import traceback
+        print(f"💥 Server error: {e}", file=sys.stderr)
+        print("Full traceback:", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":
